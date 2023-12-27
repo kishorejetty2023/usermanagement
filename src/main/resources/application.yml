@@ -1,0 +1,37 @@
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    root: INFO
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  datasource:
+    password: Admin@1234
+    username: spring
+    url: jdbc:mysql://localhost:3306/mySpringApps?useSSL=false
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+
+server:
+  port: 9090
+api:
+  admin:
+    id: e1482313-aea9-4029-9214-505fce95e8bf
+
+
+
+#spring:
+#  jpa:
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.MySQL5Dialect
+#    hibernate:
+#      ddl-auto: update
+#    show-sql: true
+#  datasource:
+#    password: Admin@1234
+#    username: spring
+#    url: jdbc:mysql://localhost:3306/mySpringApps?useSSL=false
+#    driver-class-name: com.mysql.cj.jdbc.Driver
