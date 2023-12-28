@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.List;
 
 
 @Data
@@ -41,5 +42,6 @@ public class UserRequest {
     @Pattern(regexp = UserConstants.ALPHANUM, message = "should be alpha numeric")
     private String userId;
 
+    private List<Address> addressList;
 
 }

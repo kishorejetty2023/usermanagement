@@ -1,11 +1,13 @@
 package com.java.user.management.entity;
 
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -25,5 +27,8 @@ public class UserEntity {
     private String email;
     private Date birthDate;
     private String userId;
+    @OneToMany(targetEntity = Address.class,cascade = CascadeType.ALL)
+    @JoinColumn(name = "ua_fk",referencedColumnName = "id")
+    private List<Address> addressList;
 
 }

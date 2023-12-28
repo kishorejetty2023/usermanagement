@@ -6,6 +6,7 @@ import com.java.user.management.exceptions.CustomValidationException;
 import com.java.user.management.mappers.UserMapper;
 import com.java.user.management.repository.UserRepository;
 import com.java.user.management.util.CustomUtils;
+import com.java.user.management.vo.Address;
 import com.java.user.management.vo.UserRequest;
 import com.java.user.management.vo.UserResponse;
 import com.java.user.management.vo.UserUpdateRequest;
@@ -39,10 +40,11 @@ public class UserService {
         log.info("calling Mappers");
         log.info("Actual date : {}",userRequest.getDob());
         log.info("Converting to SQL Date {}", CustomUtils.convetStringDateToSqlDate(userRequest.getDob()));
+
+        validateAddress(userRequest.getAddressList());
         UserEntity userEntity = userRepository.save(userMapper.userRequestToEntity(userRequest));
         return new ResponseEntity<>(userMapper.userEnityToResposne(userEntity), HttpStatus.CREATED);
     }
-
 
 
     public ResponseEntity<List<UserResponse>> getAllUsers(){
@@ -85,6 +87,15 @@ public class UserService {
             throw new CustomValidationException("Id is required for update");
         }
 
+    }
+
+    private void validateAddress(List<Address> addressList) {
+
+        long count = addressList.stream().filter(Address::isPermanent).count();
+
+        if(count > 1){
+            throw new CustomValidationException("Only one permanent address is allowed ");
+        }
     }
 
 

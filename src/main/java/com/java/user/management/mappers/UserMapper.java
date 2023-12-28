@@ -1,8 +1,10 @@
 package com.java.user.management.mappers;
 
 
+import com.java.user.management.entity.Address;
 import com.java.user.management.entity.UserEntity;
 import com.java.user.management.util.CustomUtils;
+
 import com.java.user.management.vo.UserRequest;
 import com.java.user.management.vo.UserResponse;
 import org.mapstruct.AfterMapping;
@@ -18,11 +20,13 @@ import java.util.List;
 public interface UserMapper {
 
 
+
     @Mapping(target = "id", source = "id")
     @Mapping(target = "firstName", source = "FName")
     @Mapping(target = "lastName", source = "LName")
     @Mapping(target = "emailId", source = "email")
     @Mapping(target = "userId", source = "userId")
+    @Mapping(target="addressList", source = "addressList")
     UserResponse userEnityToResposne(UserEntity userEntity);
 
     @AfterMapping
@@ -35,6 +39,7 @@ public interface UserMapper {
     @Mapping(target = "LName", source = "lastName")
     @Mapping(target = "email", source = "emailId")
     @Mapping(target = "userId", source = "userId")
+    @Mapping(target="addressList", source = "addressList")
     UserEntity userRequestToEntity(UserRequest userRequest) throws ParseException;
 
     @AfterMapping
@@ -44,5 +49,20 @@ public interface UserMapper {
     }
 
     List<UserResponse> map(List<UserEntity> userEntities);
+
+
+    @Mapping(target = "addLineOne", source = "addLineOne")
+    @Mapping(target = "addLineTwo", source = "addLineTwo")
+    @Mapping(target = "city",       source = "city")
+    @Mapping(target = "state",      source = "state")
+    @Mapping(target = "zip",        source = "zip")
+    @Mapping(target = "country",    source = "country")
+    @Mapping(target = "permanent",    source = "permanent")
+    @Mapping(target = "temp",    source = "temp")
+    Address requesttoEntityAddress(com.java.user.management.vo.Address address);
+
+
+    List<Address> mapListAddresses(List<com.java.user.management.vo.Address> address);
+
 
 }
