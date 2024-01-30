@@ -1,5 +1,6 @@
 package com.java.user.management.controller;
 
+import com.java.user.management.aop.LogExecutionTime;
 import com.java.user.management.service.UserService;
 import com.java.user.management.vo.UserRequest;
 import com.java.user.management.vo.UserResponse;
@@ -24,6 +25,7 @@ public class UserController {
     }
 
     @PostMapping("/createUser")
+    @LogExecutionTime(additionalMessage = "This is a createUser-Post Method")
     public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserRequest userRequest) throws ParseException {
 
         return userService.saveUser(userRequest);
@@ -31,12 +33,14 @@ public class UserController {
 
 
     @GetMapping("/getAllUsers")
+    @LogExecutionTime(additionalMessage = "This is a getAllUsers-Get Method")
     public ResponseEntity<List<UserResponse>> getAllUsers(){
         return userService.getAllUsers();
 
     }
 
     @GetMapping("/getUsersbyId/{id}")
+    @LogExecutionTime(additionalMessage = "This is a getUsersbyId-Get Method")
     public ResponseEntity<UserResponse> getUserById(@PathVariable("id") int id){
 
         log.info("Converted ID : {}", id);
@@ -44,6 +48,7 @@ public class UserController {
     }
 
     @PostMapping("/updateUserEmail")
+    @LogExecutionTime(additionalMessage = "This is a updateUserEmail-Post Method")
     public ResponseEntity<String> updateEmailByUserIdOrId(@Valid @RequestBody UserUpdateRequest userUpdateRequest){
 
         return userService.updateUserEmailByLogIdOrId(userUpdateRequest);
@@ -51,6 +56,7 @@ public class UserController {
 
 
     @DeleteMapping("/deleteUser/{id}")
+    @LogExecutionTime(additionalMessage = "This is a deleteUser/{id}-Delete Method")
     public ResponseEntity<String> deleteUserById(
             @RequestHeader(name = "x-adminId") String adminId, @PathVariable("id") int id){
 
