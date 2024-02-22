@@ -22,10 +22,10 @@ public class LogAspect {
         String methodName = methodSignature.getMethod().getName();
         Instant startTime = Instant.now();
         Object result = proceedingJoinPoint.proceed();
-        String additionalMessage = methodSignature.getMethod().getAnnotation(LogExecutionTime.class).additionalMessage();
+        //String additionalMessage = methodSignature.getMethod().getAnnotation(LogExecutionTime.class).additionalMessage();
         long elapsedTime = Duration.between(startTime, Instant.now()).toMillis();
-        log.info("Class Name: {}, Method Name: {}, Additional Message: {}, Elapsed Time: {}ms",
-                className, methodName, additionalMessage, elapsedTime);
+        /*log.info("Class Name: {}, Method Name: {}, Elapsed Time: {}ms",
+                className, methodName, elapsedTime);*/
 
         Duration elapsed = Duration.ofMillis(elapsedTime);
         String humanReadableElapsedTime = String.format(
@@ -34,7 +34,7 @@ public class LogAspect {
                 elapsed.toMinutesPart(),
                 elapsed.toSecondsPart(),
                 elapsed.toMillis());
-        log.info("Readable time format --> {} : {} ",additionalMessage,humanReadableElapsedTime);
+        log.info("Readable time format -->  {} ",humanReadableElapsedTime);
         log.info("Result: {}", result);
         return result;
     }
