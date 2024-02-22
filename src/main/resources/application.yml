@@ -1,5 +1,7 @@
 management:
-  context-path: /manage
+  endpoints:
+    web:
+      base-path: /manage
   server:
     port: 8083
 org:
@@ -15,7 +17,7 @@ logging:
 spring:
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
   datasource:
     password: Admin@1234
