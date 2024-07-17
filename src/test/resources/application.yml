@@ -1,8 +1,23 @@
+management:
+  endpoints:
+    web:
+      base-path: /manage
+  server:
+    port: 8083
+org:
+  springframework:
+    data:
+      jpa:
+        repository:
+          level: FINE
 logging:
   level:
     org.hibernate.SQL: DEBUG
-    root: INFO
+    root: DEBUG
 spring:
+  cloud:
+    compatibility-verifier:
+      enabled: false
   jpa:
     hibernate:
       ddl-auto: update
@@ -12,8 +27,53 @@ spring:
     username: spring
     url: jdbc:mysql://localhost:3306/mySpringApps?useSSL=false
     driver-class-name: com.mysql.cj.jdbc.Driver
+
+
 server:
   port: 9090
 api:
+  backed:
+    url: http://localhost:9191/api/v1/producer/getMessage
   admin:
     id: e1482313-aea9-4029-9214-505fce95e8bf
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      serviceA:
+        registerHealthIndicator: true
+        eventConsumerBufferSize: 10
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 5
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 5s
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowSize: 10
+        slidingWindowType: COUNT_BASED
+  retry:
+    instances:
+      serviceA:
+        registerHealthIndicator: true
+        maxRetryAttempts: 5
+        waitDuration: 10s
+  ratelimiter:
+    instances:
+      serviceA:
+        registerHealthIndicator: false
+        limitForPeriod: 10
+        limitRefreshPeriod: 10s
+        timeoutDuration: 3s
+
+#spring:
+#  jpa:
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.MySQL5Dialect
+#    hibernate:
+#      ddl-auto: update
+#    show-sql: true
+#  datasource:
+#    password: Admin@1234
+#    username: spring
+#    url: jdbc:mysql://localhost:3306/mySpringApps?useSSL=false
+#    driver-class-name: com.mysql.cj.jdbc.Driver

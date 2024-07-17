@@ -1,6 +1,7 @@
 package com.java.user.management.controller;
 
 import com.java.user.management.aop.LogExecutionTime;
+import com.java.user.management.service.ExternalService;
 import com.java.user.management.service.UserService;
 import com.java.user.management.vo.UserRequest;
 import com.java.user.management.vo.UserResponse;
@@ -18,10 +19,12 @@ import java.util.List;
 @RequestMapping("/api/v1/users")
 public class UserController {
 
+    private ExternalService externalService;
     private UserService userService;
 
-    public UserController(UserService userService){
+    public UserController(UserService userService, ExternalService externalService){
         this.userService = userService;
+        this.externalService = externalService;
     }
 
     @PostMapping("/createUser")
@@ -61,6 +64,12 @@ public class UserController {
             @RequestHeader(name = "x-adminId") String adminId, @PathVariable("id") int id){
 
         return userService.deleteUserById(id,adminId);
+    }
+
+    @GetMapping("callAnotherBackend")
+    @LogExecutionTime(additionalMessage = "This is a getMessage Method")
+    public ResponseEntity<String> getMessage(){
+        return externalService.callExternalService();
     }
 
 
