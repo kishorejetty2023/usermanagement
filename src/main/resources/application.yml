@@ -15,9 +15,6 @@ logging:
     org.hibernate.SQL: DEBUG
     root: INFO
 spring:
-  cloud:
-    compatibility-verifier:
-      enabled: false
   jpa:
     hibernate:
       ddl-auto: update
