@@ -12,27 +12,30 @@ org:
           level: FINE
 logging:
   level:
-    org.hibernate.SQL: ERROR
+    org.hibernate.SQL: DEBUG
     root: INFO
 spring:
-  banner:
-    location: classpath:banner.txt
+  properties:
+    hibernate:
+      dialect: org.hibernate.dialect.MySQL8Dialect
+  hibernate:
+    ddl-auto: update
+    show-sql: true
+  generate-ddl: true
+#  datasource:
+#    password: Admin@1234
+#    username: spring
+#    url: jdbc:mysql://localhost:3306/mySpringApps?useSSL=false
+#    driver-class-name: com.mysql.cj.jdbc.Driver
 
   user:
     datasource:
-      jdbcUrl: jdbc:mysql://localhost:3306/mySpringApps?useSSL=false
-      password: ENC(iV6xk0sOKde113G+RuSyK/n0Wnze7h2W1rNGgOEEm5VM+DRbPSG1O6WR3wa4RE13)
+      jdbcUrl: jdbc:mysql://${MY_SQL_URL:localhost}:3306/myspringapps?useSSL=false
+      password: Admin@1234
       username: spring
       driver-class-name: com.mysql.cj.jdbc.Driver
-      hibernate:
-        ddl-auto: update
-        show-sql: true
-        format-sql: true
 
 
-jasypt:
-  encryptor:
-    password: rXzpBMH4EkKQMYAhalGMik8+Jz51Njb4OVYrSj8iIKSKrA==
 server:
   port: 9090
 api:
@@ -41,7 +44,6 @@ api:
   admin:
     id: e1482313-aea9-4029-9214-505fce95e8bf
     #ZTE0ODIzMTMtYWVhOS00MDI5LTkyMTQtNTA1ZmNlOTVlOGJm
-
 
 resilience4j:
   circuitbreaker:
@@ -69,10 +71,17 @@ resilience4j:
         limitForPeriod: 10
         limitRefreshPeriod: 10s
         timeoutDuration: 3s
-springdoc:
-  api-docs:
-    path: /v3/api-docs.yaml
-  swagger-ui:
-    disable-swagger-default-url: true
 
-
+#spring:
+#  jpa:
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.MySQL5Dialect
+#    hibernate:
+#      ddl-auto: update
+#    show-sql: true
+#  datasource:
+#    password: Admin@1234
+#    username: spring
+#    url: jdbc:mysql://localhost:3306/mySpringApps?useSSL=false
+#    driver-class-name: com.mysql.cj.jdbc.Driver

@@ -1,12 +1,23 @@
 plugins {
 	id 'java'
+	id 'jacoco'
 	id 'org.springframework.boot' version '3.3.2'
 	id 'io.spring.dependency-management' version '1.1.6'
 }
 
 group = 'com.java.user.management'
-version = '0.0.1-SNAPSHOT'
-
+version = '1.0.0'
+bootJar {
+	manifest {1
+		attributes('Implementation-Title':   'User Management',
+				'Implementation-Version': version)
+	}
+}
+def it_Excludes = ['']
+def sonar_Exclusions = [
+		'com/java/user/management/vo/**'
+		,'com/java/user/management/constants/**'
+]
 java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(17)
@@ -24,7 +35,9 @@ repositories {
 }
 
 ext {
+	//jacoco_bof = system.getenv('JACOCO_BOF')?system.getenv('JACOCO_BOF'):true as boolean
 	set('springCloudVersion', "2023.0.3")
+
 }
 
 dependencies {
@@ -33,17 +46,35 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j'
 	implementation 'org.springframework.boot:spring-boot-starter-aop'
-	implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+	implementation 'org.springdoc:springdoc-openapi-webmvc-core:1.8.0'
 	implementation 'org.apache.commons:commons-lang3:3.14.0'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	compileOnly 'org.projectlombok:lombok'
+	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
+
+
+	developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.mysql:mysql-connector-j'
-	annotationProcessor 'org.projectlombok:lombok'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	//mapstruct
+	implementation 'org.mapstruct:mapstruct:1.6.2'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.2'
+	//lombok
+	compileOnly 'org.projectlombok:lombok:1.18.34'
+	annotationProcessor 'org.projectlombok:lombok:1.18.34'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.34'
 	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
-	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+
+	// Cucumber dependencies
+	testImplementation 'io.cucumber:cucumber-java:7.14.0'
+	testImplementation 'io.cucumber:cucumber-spring:7.14.0'
+	testImplementation 'io.cucumber:cucumber-junit:7.14.0'
+
+	testImplementation 'org.projectlombok:lombok:1.18.34'
+	testImplementation 'com.h2database:h2'
 
 	//============Check these=====================
 
@@ -55,7 +86,197 @@ dependencyManagement {
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
 	}
 }
-
+def includeTagsProperty = ""
 tasks.named('test') {
 	useJUnitPlatform()
+	exclude '**/*IT.class','**/*E2E.class','**/*StepDefinitions.class' // Exclude IT test from Unit
+	testLogging {
+		events "passed", "skipped", "failed"
+	}
+}
+var test_excludes = [
+        '**/*Dto.*',
+		'**/*Entity.*',
+		'**/*Exception.*',
+		'**/*Application.*',
+		'**/batch/**',
+		'**/*Config.*',
+		'**/*Logger.*'
+]
+
+tasks.register('cucumber', Test) {
+	description = "Run Cucumber tests"
+	group = "verification"
+	dependsOn integrationTest
+	doLast {
+		javaexec {
+			main = "io.cucumber.core.cli.Main"
+			classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+			javaArgs = ['-Dspring.profiles.active=cucumber','-Dcucumber.plugin=com.wf.quality.testrun.CucumberTestRunPlugin']
+			args = [
+			        '--plugin','pretty',
+					'--plugin','html:build/reports/cucumber-reports.html',
+					'src/test/resources']
+		}
+	}
+	// Specify the path to your Cucumber feature files and glue code
+	testClassesDirs = sourceSets.test.output.classesDirs
+	classpath = sourceSets.test.runtimeClasspath
+	systemProperty 'cucumber.junit.platform.naming-strategy', 'long' // Optional, useful for reports
+
+	// Include Cucumber tests only
+	include '**/*CucumberTest*.class'
+}
+tasks.register('e2eTest', Test, ()->{
+	description = 'Runs the ent-to-end tests.'
+	group = 'verification'
+	systemProerties 'spring.profiles.active': System.getProperty("spring.profiles.active")
+
+	if(includeTagsProperty.isEmpty()){
+		includeTagsProperty = System.getProperty("e2e.includeTags")
+	}
+	useJUnitPlatform(){
+		if(includeTagsProperty!=null){
+			includeTags(includeTagsProperty)
+		}
+	}
+	include '**/*E2E.class'
+	testLogging {
+		events "passed", "skipped", "failed"
+	}
+
+})
+
+tasks.register('integrationTest', Test, ()->{
+	description = 'Runs the integration tests.'
+	group = 'verification'
+
+	useJUnitPlatform()
+	//dependsOn test
+
+	testClassesDirs =  sourceSets.test.output.classesDirs
+	classpath = sourceSets.test.runtimeClasspath
+
+	// Include integration tests and exclude unit tests
+	include '**/*IT.class'
+	exclude it_Excludes
+	shouldRunAfter test
+	// Use the same test logging and configurations as unit tests
+	testLogging {
+		events "passed", "skipped", "failed"
+	}
+
+})
+
+tasks.register('e2eSmoke', Test, ()->{
+	description = 'Runs the ent-to-end tests annotated with the critical tag.'
+	group = 'verification'
+
+	include '**/*E2E.class'
+	includeTagsProperty = "smoke"
+
+	testLogging {
+		events "passed", "skipped", "failed"
+	}
+	finalizedBy e2eTest
+})
+tasks.register('e2eCritical', Test, ()->{
+	description = 'Runs the ent-to-end tests annotated with the critical tag.'
+	group = 'verification'
+
+	include '**/*E2E.class'
+	includeTagsProperty = "critical"
+
+	testLogging {
+		events "passed", "skipped", "failed"
+	}
+	finalizedBy e2eTest
+})
+
+tasks.register('generateOpenApiYaml', JavaExec) {
+	mainClass.set("org.springframework.boot.loader.JarLauncher")
+	classpath = sourceSets.main.runtimeClasspath
+	group = 'other'
+	args = ["--springdoc.api-docs.path=/v3/api-docs.yaml"]
+	doLast {
+		copy {
+			from "${buildDir}/api-docs/v3/api-docs.yaml"
+			into "${buildDir}/generated/openapi"
+		}
+	}
+}
+
+tasks.named('jar') {
+	enabled = false
+}
+
+tasks.register('copyJar', Copy) {
+	def jarFileName = "UserManagement-${version}.jar"
+	from "$buildDir/libs"
+	include jarFileName // Adjust to your actual JAR name
+	into 'target'  // Set your desired target location
+}
+build.finalizedBy(copyJar)  // Make sure this task runs after the build task
+
+tasks.clean.dependsOn("deleteTarget")
+
+tasks.register("deleteTarget") {
+	doLast {
+		delete("target")
+	}
+}
+
+
+jacoco {
+	toolVersion = "0.8.10" // Specify the JaCoCo version
+}
+
+jacocoTestReport {
+	dependsOn test, integrationTest
+	reports {
+		xml.required = true
+		csv.required = false
+		html.outputLocation = file("${buildDir}/jacocoHtml") // HTML report path
+	}
+	// Exclude specific classes or packages
+	classDirectories.setFrom(
+			fileTree(dir: "$buildDir/classes/java/main", excludes: sonar_Exclusions )
+	)
+	afterEvaluate {
+		classDirectories.setFrom(files(classDirectories.files.collect{
+			fileTree(dir: it,
+			         exclude: test_excludes
+			)
+		}))
+		getExecutionData().setFrom(fileTree(buildDir).include("/jacoco/test.exec").include("/jacoco/integrationTest.exec"))
+	}
+}
+
+jacocoTestCoverageVerification {
+
+	afterEvaluate {
+		classDirectories.setFrom(files(classDirectories.files.collect{
+			fileTree(dir: it,
+			exclude: test_excludes
+			)
+		}))
+	}
+	violationRules {
+		rule {
+			enabled = true
+			element = 'BUNDLE'
+			limit {
+				counter = 'CLASS'
+				value = 'COVEREDRATIO'
+				minimum = 0.70// Set minimum coverage percentage (80%)
+			}
+		}
+	}
+	dependsOn jacocoTestReport
+	mustRunAfter jacocoTestReport
+}
+
+check {
+	dependsOn test, integrationTest
+	finalizedBy jacocoTestCoverageVerification
 }

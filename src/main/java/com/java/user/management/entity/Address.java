@@ -15,8 +15,8 @@ public class Address {
     @Id
     @GeneratedValue
     private int id;
-    private String addLineOne;
-    private String addLineTwo;
+    private String add_Line_One;
+    private String add_Line_Two;
     private String city;
     private String state;
     private String zip;

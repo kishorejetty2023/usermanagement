@@ -21,13 +21,13 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    private String fName;
-    private String lName;
+    private String f_Name;
+    private String l_Name;
     private String name;
     private String email;
-    private Date birthDate;
-    private String userId;
-    @OneToMany(targetEntity = Address.class,cascade = CascadeType.ALL)
+    private Date birth_Date;
+    private String user_Id;
+    @OneToMany(targetEntity = Address.class,cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "ua_fk",referencedColumnName = "id")
     private List<Address> addressList;
 

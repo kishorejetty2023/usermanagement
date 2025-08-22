@@ -1,0 +1,29 @@
+{
+  "firstName": "Kishore",
+  "lastName": "Jetty",
+  "emailId": "kishore87jetty@gmail.com",
+  "dob": "11-10-1987",
+  "userId": "K080303",
+  "addressList": [
+    {
+      "addLineOne": "1711 interfgace Lane",
+      "addLineTwo": "apt 102",
+      "city": "Charlotte",
+      "state": "NC",
+      "zip": "1235",
+      "country": "USA",
+      "permanent": false,
+      "temp": false
+    },
+    {
+      "addLineOne": "12-165 behind polytechnic college",
+      "addLineTwo": "",
+      "city": "Guntur",
+      "state": "AndhraPradesh",
+      "zip": "522005",
+      "country": "India",
+      "permanent": true,
+      "temp": false
+    }
+  ]
+}

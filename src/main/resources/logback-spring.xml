@@ -3,7 +3,7 @@
 
     <!-- Setting up log path and log file name -->
     <property name="LOG_PATH" value="./logs" />
-    <property name="LOG_FILE_NAME" value="application_logback" />
+    <property name="LOG_FILE_NAME" value="userManagement" />
 
     <!-- Setting up logging pattern for console logging -->
     <appender name="ConsoleOutput"
@@ -27,7 +27,7 @@
         <encoder class="ch.qos.logback.classic.encoder.JsonEncoder"/>
 
         <!-- Setting up a rolling policy with rolling done
-              daily and when file size is 10MB-->
+              daily and when file size is 1MB-->
         <rollingPolicy
                 class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${LOG_PATH}/archived/${LOG_FILE_NAME}-%d{yyyy-MM-dd}.%i.log
@@ -40,11 +40,14 @@
     </appender>
 
     <!-- Logging at INFO level -->
-    <root level="info">
-        <appender-ref ref="LogFile" />
+    <root level="INFO">
         <appender-ref ref="ConsoleOutput" />
     </root>
 
+    <root level="INFO">
+        <appender-ref ref="LogFile" />
+
+    </root>
     <!-- Logging at TRACE level -->
     <logger name="com.log" level="trace" additivity="false">
         <appender-ref ref="LogFile" />

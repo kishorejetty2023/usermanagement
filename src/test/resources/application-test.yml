@@ -15,20 +15,22 @@ logging:
     org.hibernate.SQL: ERROR
     root: INFO
 spring:
+  properties:
+    hibernate:
+      dialect: org.hibernate.dialect.MySQL8Dialect
+  hibernate:
+    ddl-auto: update
+    show-sql: true
+  generate-ddl: true
   banner:
     location: classpath:banner.txt
 
   user:
     datasource:
-      jdbcUrl: jdbc:mysql://localhost:3306/mySpringApps?useSSL=false
-      password: ENC(iV6xk0sOKde113G+RuSyK/n0Wnze7h2W1rNGgOEEm5VM+DRbPSG1O6WR3wa4RE13)
-      username: spring
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      hibernate:
-        ddl-auto: update
-        show-sql: true
-        format-sql: true
-
+      jdbcUrl: jdbc:h2:mem:testdb
+      password: password
+      username: sa
+      driver-class-name: org.h2.Driver
 
 jasypt:
   encryptor:
@@ -40,8 +42,6 @@ api:
     url: http://localhost:9191/api/v1/producer/getMessage
   admin:
     id: e1482313-aea9-4029-9214-505fce95e8bf
-    #ZTE0ODIzMTMtYWVhOS00MDI5LTkyMTQtNTA1ZmNlOTVlOGJm
-
 
 resilience4j:
   circuitbreaker:
@@ -69,10 +69,3 @@ resilience4j:
         limitForPeriod: 10
         limitRefreshPeriod: 10s
         timeoutDuration: 3s
-springdoc:
-  api-docs:
-    path: /v3/api-docs.yaml
-  swagger-ui:
-    disable-swagger-default-url: true
-
-

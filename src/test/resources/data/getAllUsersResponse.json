@@ -1,0 +1,92 @@
+[
+  {
+    "id": 1,
+    "firstName": "Kishore",
+    "lastName": "Jetty",
+    "emailId": "kishore87jetty@gmail.com",
+    "dob": "11-10-1987",
+    "userId": "k080303",
+    "addressList": [
+      {
+        "addLineOne": "1711 interfgace Lane",
+        "addLineTwo": "apt 102",
+        "city": "Charlotte",
+        "state": "NC",
+        "zip": "28262",
+        "country": "USA",
+        "permanent": false,
+        "temp": false
+      },
+      {
+        "addLineOne": "12-165 Behind polytechnic college",
+        "addLineTwo": "Challavaripalem",
+        "city": "Guntur",
+        "state": "AndhraPradesh",
+        "zip": "522003",
+        "country": "India",
+        "permanent": true,
+        "temp": false
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "firstName": "Arabaz",
+    "lastName": "Khan",
+    "emailId": "Arbaz.Khan@ymail.com",
+    "dob": "03-04-1987",
+    "userId": "k080384",
+    "addressList": [
+      {
+        "addLineOne": "1711 interfgace Lane",
+        "addLineTwo": "apt 301",
+        "city": "Charlotte",
+        "state": "NC",
+        "zip": "28262",
+        "country": "USA",
+        "permanent": false,
+        "temp": false
+      },
+      {
+        "addLineOne": "18/75 shyamala nagar",
+        "addLineTwo": "",
+        "city": "Guntur",
+        "state": "AndhraPradesh",
+        "zip": "522001",
+        "country": "India",
+        "permanent": true,
+        "temp": false
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "firstName": "Kiran",
+    "lastName": "Kaur",
+    "emailId": "Kiran.Kaur@ymail.com",
+    "dob": "03-04-1987",
+    "userId": "k080331",
+    "addressList": [
+      {
+        "addLineOne": "1711 interfgace Lane",
+        "addLineTwo": "apt 301",
+        "city": "Charlotte",
+        "state": "NC",
+        "zip": "28262",
+        "country": "USA",
+        "permanent": false,
+        "temp": false
+      },
+      {
+        "addLineOne": "18/75 shyamala nagar",
+        "addLineTwo": "",
+        "city": "Guntur",
+        "state": "AndhraPradesh",
+        "zip": "522001",
+        "country": "India",
+        "permanent": true,
+        "temp": false
+      }
+    ]
+  }
+]

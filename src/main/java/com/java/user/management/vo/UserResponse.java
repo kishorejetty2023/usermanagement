@@ -1,9 +1,6 @@
 package com.java.user.management.vo;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.List;
 
@@ -11,6 +8,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@Builder
 public class UserResponse {
 
     private int id;
