@@ -17,10 +17,9 @@ logging:
 spring:
   banner:
     location: classpath:banner.txt
-
   user:
     datasource:
-      jdbcUrl: jdbc:mysql://localhost:3306/mySpringApps?useSSL=false
+      jdbcUrl: jdbc:mysql://mysql:3306/myspringapps?useSSL=false
       password: ENC(iV6xk0sOKde113G+RuSyK/n0Wnze7h2W1rNGgOEEm5VM+DRbPSG1O6WR3wa4RE13)
       username: spring
       driver-class-name: com.mysql.cj.jdbc.Driver
@@ -28,8 +27,6 @@ spring:
         ddl-auto: update
         show-sql: true
         format-sql: true
-
-
 jasypt:
   encryptor:
     password: rXzpBMH4EkKQMYAhalGMik8+Jz51Njb4OVYrSj8iIKSKrA==
@@ -40,9 +37,6 @@ api:
     url: http://localhost:9191/api/v1/producer/getMessage
   admin:
     id: e1482313-aea9-4029-9214-505fce95e8bf
-    #ZTE0ODIzMTMtYWVhOS00MDI5LTkyMTQtNTA1ZmNlOTVlOGJm
-
-
 resilience4j:
   circuitbreaker:
     instances:
@@ -74,5 +68,3 @@ springdoc:
     path: /v3/api-docs.yaml
   swagger-ui:
     disable-swagger-default-url: true
-
-

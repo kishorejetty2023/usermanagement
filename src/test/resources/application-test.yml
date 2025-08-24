@@ -15,9 +15,6 @@ logging:
     org.hibernate.SQL: ERROR
     root: INFO
 spring:
-  properties:
-    hibernate:
-      dialect: org.hibernate.dialect.MySQL8Dialect
   hibernate:
     ddl-auto: update
     show-sql: true
@@ -27,10 +24,15 @@ spring:
 
   user:
     datasource:
-      jdbcUrl: jdbc:h2:mem:testdb
-      password: password
+      jdbcUrl: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
       username: sa
+      password: password
       driver-class-name: org.h2.Driver
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        ddl-auto: create
+        show-sql: true
+        format-sql: true
 
 jasypt:
   encryptor:

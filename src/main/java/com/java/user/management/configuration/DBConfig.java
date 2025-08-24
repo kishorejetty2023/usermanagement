@@ -37,6 +37,9 @@ public class DBConfig {
     @Value("${spring.user.datasource.hibernate.format-sql}")
     private String formatSql;
 
+    @Value("${spring.user.datasource.hibernate.dialect}")
+    private String dialect;
+
     @Primary
     @Bean(name = "userDataSource")
     @ConfigurationProperties(prefix = "spring.user.datasource")
@@ -67,7 +70,7 @@ public class DBConfig {
         propertes.put("hibernate.hbm2ddl.auto",ddlAuto);
         propertes.put("hibernate.show_sql",showSql);
         propertes.put("hibernate.format_sql",formatSql);
-        //propertes.put("hibernate.dialect",dialect);
+        propertes.put("hibernate.dialect",dialect);
         return propertes;
     }
 

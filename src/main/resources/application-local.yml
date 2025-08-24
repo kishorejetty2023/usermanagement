@@ -15,26 +15,18 @@ logging:
     org.hibernate.SQL: DEBUG
     root: INFO
 spring:
-  properties:
-    hibernate:
-      dialect: org.hibernate.dialect.MySQL8Dialect
   hibernate:
     ddl-auto: update
     show-sql: true
   generate-ddl: true
-#  datasource:
-#    password: Admin@1234
-#    username: spring
-#    url: jdbc:mysql://localhost:3306/mySpringApps?useSSL=false
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-
   user:
     datasource:
-      jdbcUrl: jdbc:mysql://${MY_SQL_URL:localhost}:3306/myspringapps?useSSL=false
-      password: Admin@1234
-      username: spring
+      jdbcUrl: ${SPRING_DATASOURCE_URL}
+      password: ${SPRING_DATASOURCE_PASSWORD}
+      username: ${SPRING_DATASOURCE_USERNAME}
       driver-class-name: com.mysql.cj.jdbc.Driver
-
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
 
 server:
   port: 9090
@@ -43,8 +35,6 @@ api:
     url: http://localhost:9191/api/v1/producer/getMessage
   admin:
     id: e1482313-aea9-4029-9214-505fce95e8bf
-    #ZTE0ODIzMTMtYWVhOS00MDI5LTkyMTQtNTA1ZmNlOTVlOGJm
-
 resilience4j:
   circuitbreaker:
     instances:
@@ -71,17 +61,3 @@ resilience4j:
         limitForPeriod: 10
         limitRefreshPeriod: 10s
         timeoutDuration: 3s
-
-#spring:
-#  jpa:
-#    properties:
-#      hibernate:
-#        dialect: org.hibernate.dialect.MySQL5Dialect
-#    hibernate:
-#      ddl-auto: update
-#    show-sql: true
-#  datasource:
-#    password: Admin@1234
-#    username: spring
-#    url: jdbc:mysql://localhost:3306/mySpringApps?useSSL=false
-#    driver-class-name: com.mysql.cj.jdbc.Driver

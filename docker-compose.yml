@@ -3,11 +3,13 @@ services:
     image: kishorejetty2023/usermanagement:1.0.0
     container_name: usermanagement
     ports:
-      - "9091:9091"
+      - "9090:9090"
       - "8083:8083"
     environment:
       - SPRING_PROFILES_ACTIVE=local
-      - MY_SQL_URL=mysql
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/myspringapps?allowPublicKeyRetrieval=true&useSSL=false
+      - SPRING_DATASOURCE_USERNAME=spring
+      - SPRING_DATASOURCE_PASSWORD=Admin@1234
       - JAVA_OPTS=-Xms512m -Xmx1024m -Dlogging.level.root=DEBUG
     depends_on:
       - mysql
@@ -21,7 +23,7 @@ services:
       MYSQL_USER: spring
       MYSQL_PASSWORD: Admin@1234
     ports:
-      - "3306:3306"
+      - "3350:3306"
     volumes:
       - mysql-data:/var/lib/mysql
 volumes:
